@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import security.example.springsecuritypractice2.domain.AuthenticationRequest;
 import security.example.springsecuritypractice2.service.JwtService;
+import security.example.springsecuritypractice2.service.RoleService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 public class LoginController {
 
     private final JwtService jwtService;
+    private final RoleService roleService;
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody AuthenticationRequest authenticationRequest){
@@ -28,8 +30,7 @@ public class LoginController {
 
         log.info("username =" + username + "password =" + password);
 
-        List<String> roles = new ArrayList<String>();
-        roles.add("ROLE_USER");
+        List<String> roles = roleService.addRoleType();
 
         String token = jwtService.issue(username, password, roles);
         log.info("token: " + token);
